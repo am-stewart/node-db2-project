@@ -9,16 +9,20 @@ router.get('/', async (req, res, next) => {
     } catch(err) {
         next(err)
     }
+});
+
+router.get('/:id', checkCarId, (req, res) => {
+    res.json(req.car)
+});
+
+router.post('/', checkCarPayload, checkVinNumberValid, async (req, res, next) => {
+    try {
+        const newCar = await Cars.create(req.body);
+        res.status(201).json(newCar);
+    } catch(err) {
+        next(err)
+    }
 })
-
-
-
-
-
-
-
-
-
 
 router.use((err, req, res, next) => { // eslint-disable-line
     res.status(err.status || 500).json({
